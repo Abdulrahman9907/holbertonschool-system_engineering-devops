@@ -1,0 +1,27 @@
+INFRASTRUCTURE DIAGRAM:
+
+User -> DNS (www.foobar.com -> 8.8.8.8) -> Server (8.8.8.8)
+                                           |
+                                           +-- Nginx (Web Server :80)
+                                           |     |
+                                           |     +-- Application Server
+                                           |           |
+                                           |           +-- Code Base
+                                           |           |
+                                           +-- MySQL (Database)
+
+COMPONENTS:
+
+Server: Physical/virtual machine hosting all components
+Domain Name: foobar.com - human-readable address translating to IP 8.8.8.8
+DNS Record: www is a CNAME or A record pointing to 8.8.8.8
+Web Server (Nginx): Handles HTTP requests, serves static content
+Application Server: Executes business logic, processes dynamic content
+Database (MySQL): Stores and manages persistent data
+Communication: HTTP/HTTPS protocol over TCP/IP
+
+ISSUES:
+
+SPOF: Single server - if it fails, entire site goes down
+Downtime: Deploying code requires restarting services
+Cannot Scale: Single server cannot handle traffic spikes
