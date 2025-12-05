@@ -1,0 +1,40 @@
+INFRASTRUCTURE DIAGRAM:
+
+User -> DNS (www.foobar.com) -> HAproxy Load Balancer (8.8.8.8)
+                                 |
+                    +------------+------------+
+                    |                         |
+                Server 1                  Server 2
+                    |                         |
+                Nginx (Web)               Nginx (Web)
+                    |                         |
+              App Server                App Server
+                    |                         |
+                Code Base                 Code Base
+                    |                         |
+            MySQL Primary  <------>  MySQL Replica
+
+WHY EACH ELEMENT:
+
+Load Balancer: Distributes traffic across servers, eliminates single point of failure
+Server 2: Redundancy and load distribution
+MySQL Replica: Data backup and read scaling
+
+LOAD BALANCER:
+
+Algorithm: Round Robin - distributes requests sequentially across servers
+Setup: Active-Active (both servers handle traffic simultaneously)
+Active-Active: All servers process requests concurrently, max resource usage
+Active-Passive: One active, others standby until failure occurs
+
+DATABASE:
+
+Primary-Replica: Primary handles writes, Replica syncs data and handles reads
+Primary Node: Accepts write operations, replicates to Replica
+Replica Node: Read-only copy, reduces Primary load, provides backup
+
+ISSUES:
+
+SPOF: Load balancer itself is single point of failure
+Security: No firewall protection, no HTTPS encryption
+No Monitoring: Cannot detect failures or performance issues
