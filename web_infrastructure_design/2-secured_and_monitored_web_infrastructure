@@ -1,0 +1,44 @@
+INFRASTRUCTURE DIAGRAM:
+
+User -> HTTPS -> [Firewall 1] -> HAproxy (SSL Termination)
+                                  |
+                     +------------+------------+
+                     |                         |
+              [Firewall 2]              [Firewall 3]
+                     |                         |
+                 Server 1                  Server 2
+                     |                         |
+                 Nginx (Web)               Nginx (Web)
+                     |                         |
+               App Server                App Server
+                     |                         |
+                 Code Base                 Code Base
+                     |                         |
+             MySQL Primary  <------>  MySQL Replica
+                     |                         |
+            Monitoring Client         Monitoring Client
+                     |                         |
+                     +------------+------------+
+                                  |
+                          Monitoring Service
+                          (Sumologic)
+
+WHY EACH ELEMENT:
+
+Firewalls: Filter malicious traffic, protect against unauthorized access
+SSL Certificate: Encrypts data in transit, protects user privacy
+Monitoring Clients: Collect metrics, logs, detect issues
+
+SECURITY & MONITORING:
+
+Firewalls: Block unauthorized ports/IPs, prevent attacks
+HTTPS: Encrypts HTTP traffic using SSL/TLS, prevents eavesdropping
+Monitoring: Tracks performance, uptime, errors, alerts on issues
+Data Collection: Agents send logs/metrics to central monitoring service
+QPS Monitoring: Configure monitoring client to track Nginx access logs per second
+
+ISSUES:
+
+SSL Termination at Load Balancer: Traffic unencrypted between LB and servers
+Single MySQL Writer: Write bottleneck, SPOF for data modifications
+Identical Components: Resource waste, cannot optimize per component type
