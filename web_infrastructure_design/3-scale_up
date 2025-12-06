@@ -1,0 +1,27 @@
+INFRASTRUCTURE DIAGRAM:
+
+User -> DNS -> HAproxy LB1 (Primary) <-> HAproxy LB2 (Cluster)
+               |
+               +-------------------+-------------------+-------------------+
+               |                   |                   |                   |
+          Web Server          App Server          App Server         Database Server
+           (Nginx)           (Server 1)          (Server 2)              (MySQL)
+               |                   |                   |                   |
+           Static Files        Code Base           Code Base          Primary DB
+                                   |                   |
+                              Process Logic       Process Logic
+
+WHY EACH ELEMENT:
+
+Second Load Balancer: Eliminates LB as SPOF, high availability cluster
+Separate Web Server: Optimized for static content, independent scaling
+Separate App Servers: Scale application logic independently, isolated resources
+Separate DB Server: Dedicated resources for database, better performance, independent scaling
+
+BENEFITS:
+
+- Component isolation allows independent scaling
+- Web server can be optimized for static content delivery
+- App servers can scale horizontally based on traffic
+- Database gets dedicated resources without sharing CPU/memory
+- Load balancer cluster provides redundancy
